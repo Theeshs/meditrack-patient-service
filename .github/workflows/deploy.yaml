@@ -57,5 +57,10 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: '.'
+          source: './*'
           target: '/home/ec2-user/meditrack'
+
+      - name: Set permissions
+        run: |
+          ssh -i id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} \
+          "chmod 600 /home/ec2-user/meditrack/.env && chmod -R 755 /home/ec2-user/meditrack"

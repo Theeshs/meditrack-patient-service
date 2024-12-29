@@ -16,7 +16,7 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
@@ -46,7 +46,7 @@ jobs:
       #     debug: true
       - name: Copy files to EC2
         run: |
-          scp -r .env ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ec2-user/meditrack
+          scp -r .env ${{ secrets.EC2_USER_NAME }}@${{ secrets.EC2_HOST }}:/home/ec2-user/meditrack
 
       - name: Transfer repository files
         uses: appleboy/scp-action@master

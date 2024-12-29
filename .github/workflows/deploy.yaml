@@ -61,3 +61,24 @@ jobs:
           source: '.'
           target: '/home/ec2-user/meditrack'
           debug: true
+
+      - name: Set execute permission on deploy script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            chmod +x /home/ec2-user/meditrack/deploy.sh
+
+      - name: Trigger bash script on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /home/ec2-user/meditrack/
+            ./deploy.sh

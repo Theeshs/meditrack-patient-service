@@ -13,6 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
       - name: Create .env file dynamically
         env:
           ENV: ${{ secrets.ENV }}
@@ -27,16 +34,19 @@ jobs:
           echo "DATABASE=${{ secrets.DATABASE }}" >> .env
           ls -la
 
-      - name: Transfer .env file
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER_NAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          source: '.env'
-          target: '/home/ec2-user/meditrack'
-          debug: true
+      # - name: Transfer .env file
+      #   uses: appleboy/scp-action@master
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USER_NAME }}
+      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     port: 22
+      #     source: '.env'
+      #     target: '/home/ec2-user/meditrack'
+      #     debug: true
+      - name: Copy files to EC2
+        run: |
+          scp -r .env ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ec2-user/meditrack
 
       - name: Transfer repository files
         uses: appleboy/scp-action@master

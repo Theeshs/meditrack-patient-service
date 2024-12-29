@@ -50,6 +50,11 @@ jobs:
           target: '/home/ec2-user/meditrack'
           debug: true
 
+      - name: Set permissions
+        run: |
+          ssh -i id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} \
+          "chmod 600 /home/ec2-user/meditrack/.env && chmod -R 755 /home/ec2-user/meditrack"
+
       - name: Transfer repository files
         uses: appleboy/scp-action@master
         with:
@@ -59,8 +64,3 @@ jobs:
           port: 22
           source: './*'
           target: '/home/ec2-user/meditrack'
-
-      - name: Set permissions
-        run: |
-          ssh -i id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} \
-          "chmod 600 /home/ec2-user/meditrack/.env && chmod -R 755 /home/ec2-user/meditrack"

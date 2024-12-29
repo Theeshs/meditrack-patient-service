@@ -63,4 +63,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           source: './*'
+          excludes:
+            - 'id_rsa'
           target: '/home/ec2-user/meditrack'
+          debug: true

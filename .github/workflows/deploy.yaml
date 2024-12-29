@@ -27,7 +27,7 @@ jobs:
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          DB_USER: ${{ secrets.DB_USER }}
+          DB_USER: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DATABASE: ${{ secrets.DATABASE }}
         run: |
@@ -35,7 +35,7 @@ jobs:
           echo "EC2_USERNAME=${EC2_USERNAME}" >> .env
           echo "DB_HOST=${DB_HOST}" >> .env
           echo "DB_PORT=${DB_PORT}" >> .env
-          echo "DB_USER=${DB_USER}" >> .env
+          echo "DB_USER=${DB_USERNAME}" >> .env
           echo "DB_PASSWORD=${DB_PASSWORD}" >> .env
           echo "DATABASE=${DATABASE}" >> .env
 
@@ -47,5 +47,15 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           source: '.env'
-          target: '/home/ec2-user/meditrack/.env'
+          target: '/home/ec2-user/meditrack'
           debug: true
+
+      - name: Transfer repository files
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: '.'
+          target: '/home/ec2-user/meditrack'

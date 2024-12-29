@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: meditrack-apis
+  name: patient-service-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: meditrack-apis
+      app: patient-service-api
   template:
     metadata:
       labels:
-        app: meditrack-apis
+        app: patient-service-api
     spec:
       containers:
-        - name: patient-service-container
-          image: patient-service:latest
+        - name: patient-service-api-container
+          image: patient-service-api:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000

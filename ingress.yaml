@@ -1,18 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: patient-service-ingress
+  name: patient-service-api-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: meditrack-patient-records.local
+    - host: patient-service-api.local
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: patient-service-service
+                name: patient-service-api-service
                 port:
                   number: 3000

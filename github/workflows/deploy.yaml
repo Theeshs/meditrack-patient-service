@@ -3,7 +3,7 @@ name: Deploy to VPC Utrahost
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:

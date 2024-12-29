@@ -29,15 +29,15 @@ jobs:
           DB_PORT: ${{ secrets.DB_PORT }}
           DB_USER: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DATABASE: ${{ secrets.DATABASE }}
+          DATABASE: ${{ secrets.DB_NAME }}
         run: |
           echo "ENV=${ENV}" > .env
           echo "EC2_USERNAME=${EC2_USERNAME}" >> .env
           echo "DB_HOST=${DB_HOST}" >> .env
           echo "DB_PORT=${DB_PORT}" >> .env
-          echo "DB_USER=${DB_USERNAME}" >> .env
+          echo "DB_USERNAME=${DB_USERNAME}" >> .env
           echo "DB_PASSWORD=${DB_PASSWORD}" >> .env
-          echo "DATABASE=${DATABASE}" >> .env
+          echo "DB_NAME=${DB_NAME}" >> .env
 
       - name: Transfer .env file
         uses: appleboy/scp-action@master

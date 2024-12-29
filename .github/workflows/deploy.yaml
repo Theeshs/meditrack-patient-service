@@ -20,19 +20,22 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Create .env file dynamically
-        env:
-          ENV: ${{ secrets.ENV }}
-          EC2_USER_NAME: ${{ secrets.EC2_USER_NAME }}
-        run: |
-          echo "ENV=$ENV" >> .env
-          echo "EC2_USERNAME=$EC2_USER_NAME" >> .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "DATABASE=${{ secrets.DATABASE }}" >> .env
-          ls -la
+      - name: Execute remote command
+        run: ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER_NAME }}@${{ secrets.EC2_HOST }} "echo 'Connected successfully'"
+
+      # - name: Create .env file dynamically
+      #   env:
+      #     ENV: ${{ secrets.ENV }}
+      #     EC2_USER_NAME: ${{ secrets.EC2_USER_NAME }}
+      #   run: |
+      #     echo "ENV=$ENV" >> .env
+      #     echo "EC2_USERNAME=$EC2_USER_NAME" >> .env
+      #     echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+      #     echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+      #     echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+      #     echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+      #     echo "DATABASE=${{ secrets.DATABASE }}" >> .env
+      #     ls -la
 
       # - name: Transfer .env file
       #   uses: appleboy/scp-action@master

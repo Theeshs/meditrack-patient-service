@@ -2,16 +2,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: patient-service-api
+  labels:
+    app: patient-service-api
 spec:
-  replicas: 2 # Increased replicas for redundancy and load balancing
+  replicas: 2
   selector:
     matchLabels:
       app: patient-service-api
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 0 # Ensure no pods are taken offline
-      maxSurge: 1 # Add one extra pod during updates
+      maxUnavailable: 0
+      maxSurge: 1
   template:
     metadata:
       labels:
@@ -25,13 +27,13 @@ spec:
             - containerPort: 3000
           readinessProbe:
             httpGet:
-              path: / # Adjust to your API's health endpoint
+              path: / # Adjust this if your health check endpoint differs
               port: 3000
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: / # Adjust to your API's health endpoint
+              path: / # Adjust this if your health check endpoint differs
               port: 3000
             initialDelaySeconds: 10
             periodSeconds: 10
@@ -48,7 +50,7 @@ spec:
     app: patient-service-api
   ports:
     - protocol: TCP
-      port: 3000
+      port: 80
       targetPort: 3000
   type: ClusterIP
 
@@ -59,6 +61,7 @@ metadata:
   name: patient-service-api-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/backend-protocol: 'HTTP'
 spec:
   rules:
     - host: patient-service-api.local
@@ -70,4 +73,4 @@ spec:
               service:
                 name: patient-service-api-service
                 port:
-                  number: 3000
+                  number: 80

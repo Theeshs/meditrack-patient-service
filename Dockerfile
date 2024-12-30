@@ -13,9 +13,6 @@ RUN npm ci
 # Copy application code
 COPY . .
 
-# Install development dependencies if needed
-RUN npm install -g @nestjs/cli nodemon
-
 # Expose the application port
 EXPOSE 3000
 

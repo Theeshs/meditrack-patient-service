@@ -14,4 +14,3 @@ echo "removing unused docker images"
 docker image prune -f
 
 echo "forwarding port"
-nohup kubectl port-forward svc/patient-service-api-service 3000:3000 > port-forward.log 2>&1 &
